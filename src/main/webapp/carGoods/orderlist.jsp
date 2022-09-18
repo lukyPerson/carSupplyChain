@@ -24,7 +24,9 @@
                     <tr>
                         <th width="18%">${item.id}</th>
                         <th width="5%">${item.price}</th>
-                        <th width="10%">${item.number}</th>
+                        <th id='2' width="9%"><a href="${pageContext.request.contextPath}/cargoods/queryordersdetails?id=${item.id}">订单详情</a>
+                            <a href="${pageContext.request.contextPath}/cargoods/teardowndetails?orderId=${item.id}">拆单</a>
+                        </th>
                     </tr>
                 </c:forEach>
 

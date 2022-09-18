@@ -33,7 +33,7 @@ public class CarGoodsServiceImpl implements CarVGoodsService {
     }
 
     @Override
-    public List<CarOrderDetails> queryOrdersDetails(Integer id) {
+    public List<CarOrderDetails> queryOrdersDetails(String id) {
         return dao.queryOrdersDetails(id);
     }
 
@@ -71,6 +71,18 @@ public class CarGoodsServiceImpl implements CarVGoodsService {
             BigDecimal orderprice = BigDecimal.valueOf(cart.getPrice() * cart.getNum());
             dao.saveOrdersDetails(odUUid,cart.getName(),cart.getNum(),cart.getProduce(),orderprice,uuid);
         }
+    }
+
+    public TearDownDetails queryOrdersTearDownDetails(CarOrderDetails c){
+        return carOrderDao.queryTearDownDetails(c.getOrderId(),c.getProduce());
+    }
+
+    public Integer insertTearDownDetails(TearDownDetails tearDownDetails){
+        return carOrderDao.insertTearDownDetails(tearDownDetails);
+    }
+
+    public Integer updateTearDownDetails(TearDownDetails tearDownDetails){
+        return carOrderDao.updateTearDownDetails(tearDownDetails);
     }
 
 

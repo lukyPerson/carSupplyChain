@@ -133,7 +133,7 @@ public class CarGoodsDaoImpl implements CarGoodsDao {
      * @Date： 2020/4/20 12:17 AM
      */
     @Override
-    public List<CarOrderDetails> queryOrdersDetails(Integer id) {
+    public List<CarOrderDetails> queryOrdersDetails(String id) {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -144,7 +144,7 @@ public class CarGoodsDaoImpl implements CarGoodsDao {
             StringBuffer sql = new StringBuffer();
             sql.append("SELECT * FROM car_orders_details where 1=1");
             if(!StringUtils.isEmpty(id)){
-                sql.append(" and id =").append(id);
+                sql.append(" and order_id ='" ).append(id).append("'");
             }
             //3 操作数据库——查询一条数据记录
             ps = conn.prepareStatement(sql.toString());
@@ -156,7 +156,7 @@ public class CarGoodsDaoImpl implements CarGoodsDao {
                         rs.getInt("num"),
                         rs.getString("produce"),
                         rs.getBigDecimal("price"),
-                        rs.getInt("order_id")
+                        rs.getString("order_id")
 
                 );
                 carOrderDetailsList.add(vo);

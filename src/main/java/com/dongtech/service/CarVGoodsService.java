@@ -14,9 +14,13 @@ public interface CarVGoodsService {
 
     List<CarOrders> queryOrders();
 
-    List<CarOrderDetails> queryOrdersDetails(Integer id);
+    List<CarOrderDetails> queryOrdersDetails(String id);
 
     void saveOrders(List<Cart> cartList);
 
+    TearDownDetails queryOrdersTearDownDetails(CarOrderDetails c);
+
+    Integer insertTearDownDetails(TearDownDetails tearDownDetails);
+    Integer updateTearDownDetails(TearDownDetails tearDownDetails);
 
 }

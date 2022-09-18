@@ -1,10 +1,7 @@
 package com.dongtech.controller;
 
 import com.dongtech.service.CarVGoodsService;
-import com.dongtech.vo.CarGoods;
-import com.dongtech.vo.CarOrderDetails;
-import com.dongtech.vo.CarOrders;
-import com.dongtech.vo.Cart;
+import com.dongtech.vo.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,6 +32,12 @@ public class CarGoodsController {
     @Resource
     private  CarVGoodsService carVGoodsService;
 
+
+    /**
+     * @Author gzl
+     * @Description：清空购物车
+     * @Exception
+     */
 
     /**
      * @Author gzl
@@ -92,7 +95,7 @@ public class CarGoodsController {
      * @Date： 2020/4/19 11:59 PM
      */
     @RequestMapping("/queryordersdetails")
-    public ModelAndView QueryOrdersDetails(Integer id)  {
+    public ModelAndView QueryOrdersDetails(String id)  {
         List<CarOrderDetails> list =carVGoodsService.queryOrdersDetails(id);
         /**
          * 模型和视图
@@ -219,6 +222,40 @@ public class CarGoodsController {
         modelAndView.addObject("list",list);
         modelAndView.setViewName("carGoods/list");
         return modelAndView;
+    }
+
+    //拆单
+    @RequestMapping("/teardowndetails")
+    public ModelAndView teardowndetails(HttpServletRequest request,HttpServletResponse response,String orderId) throws UnsupportedEncodingException {
+        List<Cart> cartInCookie = getCartInCookie(response, request);
+        List<CarOrderDetails> list = carVGoodsService.queryOrdersDetails(orderId);
+        //筛选出不同的
+        for (CarOrderDetails c : list) {
+            TearDownDetails tdd = carVGoodsService.queryOrdersTearDownDetails(c);
+            if(tdd != null){
+                tdd.setNum(tdd.getNum()+c.getNum());
+                tdd.setCargoods_name(tdd.getCargoods_name() + c.getGoodsname());
+                Integer integer = carVGoodsService.updateTearDownDetails(tdd);
+                if (integer != 1){
+                    System.out.println("拆单更新失败");
+                    throw  new RuntimeException("拆单更新失败");
+                }
+            }else {
+                TearDownDetails t = new TearDownDetails();
+                t.setNum(c.getNum());
+                t.setCargoods_name(c.getGoodsname());
+                t.setOrderId(c.getOrderId());
+                t.setProduce(c.getProduce());
+                Integer integer = carVGoodsService.insertTearDownDetails(t);
+                if (integer != 1){
+                    System.out.println("拆单失败");
+                    throw  new RuntimeException("拆单失败");
+                }
+            }
+        }
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("index");
+        return null;
     }
 
 

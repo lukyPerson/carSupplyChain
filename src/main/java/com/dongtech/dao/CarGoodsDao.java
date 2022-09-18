@@ -13,7 +13,7 @@ public interface CarGoodsDao {
 
     List<CarOrders> queryOrders();
 
-    List<CarOrderDetails> queryOrdersDetails(Integer id);
+    List<CarOrderDetails> queryOrdersDetails(String id);
 
     void saveOrdersDetails(String id, String goods_name, int num, String produce , BigDecimal price, String order_id);
 

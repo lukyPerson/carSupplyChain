@@ -81,6 +81,8 @@ INSERT INTO `cargoods` VALUES (1, '001', '后视镜', '北京厂', 1.00, '1', '�
 INSERT INTO `cargoods` VALUES (2, '002', '玻璃', '北京厂', 89.00, '3', '钢化玻璃', 10);
 INSERT INTO `cargoods` VALUES (3, '003', '前灯', '北京厂', 16.00, '4', '高亮度', 10);
 INSERT INTO `cargoods` VALUES (4, '003', '前保险杠', '北京厂', 33.00, '2', '高强度', 10);
+INSERT INTO `cargoods` VALUES (5, '003', '后保险杠', '上海厂', 35.00, '2', '高强度', 10);
+INSERT INTO `cargoods` VALUES (6, '003', '轮胎', '南京厂', 39.00, '2', '高强度', 10);
 COMMIT;
 
 -- ----------------------------
@@ -88,8 +90,8 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `tear_down_details`;
 CREATE TABLE `tear_down_details` (
-  `id` int(11) NOT NULL,
-  `order_id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL auto_increment,
+  `order_id` varchar(50) DEFAULT NULL,
   `produce` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `cargoods_name` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `num` int(11) DEFAULT NULL,
