@@ -258,6 +258,56 @@ public class CarGoodsController {
         return null;
     }
 
+    /**
+     * 清空购物车
+     */
+    @RequestMapping("/clearCart")
+    public ModelAndView clearCart(HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
+        Cookie cookie = getCookie(request);
+        cookie.setValue("");
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView cart = this.getCart(request, response);
+        return cart;
+    }
+
+    /**
+     * 删除购物车指定商品
+     */
+    @RequestMapping("/deleteGoodsInCart")
+    public ModelAndView deleteGoodsInCart(HttpServletRequest request,HttpServletResponse response,int id) throws UnsupportedEncodingException {
+        List<Cart> cartInCookie = getCartInCookie(response, request);
+        cartInCookie.removeIf(e->e.getId()==id);
+        String value = "";
+        if (cartInCookie.size() != 0) {
+            value = makeCookieValue(cartInCookie);
+        }
+        Cookie cookie = getCookie(request);
+        cookie.setValue(value);
+        cookie.setMaxAge(60*30);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView cart = this.getCart(request, response);
+        return cart;
+    }
+
+    /**
+     * 按月统计订单数
+     */
+    @RequestMapping("/statistic")
+    public ModelAndView statisticOrderNum() throws UnsupportedEncodingException {
+//        List<StatisticsOrderNum> list = carVGoodsService.statisticOrders();
+        int[] list = new int[]{1,2,3,4,5,6,7,66,55,4,44,5};
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("list",list);
+        modelAndView.setViewName("/carGoods/repertory");
+        return modelAndView;
+    }
+
+
 
     /**
      * 获取cookie中的购物车列表

@@ -21,6 +21,8 @@ public interface CarVGoodsService {
     TearDownDetails queryOrdersTearDownDetails(CarOrderDetails c);
 
     Integer insertTearDownDetails(TearDownDetails tearDownDetails);
+
     Integer updateTearDownDetails(TearDownDetails tearDownDetails);
 
+    List<StatisticsOrderNum> statisticOrders();
 }

@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -83,6 +85,29 @@ public class CarGoodsServiceImpl implements CarVGoodsService {
 
     public Integer updateTearDownDetails(TearDownDetails tearDownDetails){
         return carOrderDao.updateTearDownDetails(tearDownDetails);
+    }
+
+    @Override
+    public List<StatisticsOrderNum> statisticOrders() {
+        List<CarOrders> carOrdersList = dao.queryOrders();
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (CarOrders carOrder : carOrdersList) {
+            Integer orderNum = map.get(carOrder.getCreateTs().getMonth());
+            if (orderNum == null){
+                map.put(carOrder.getCreateTs().getMonth(),1);
+            }else {
+                orderNum++;
+                map.put(carOrder.getCreateTs().getMonth(),orderNum);
+            }
+        }
+        ArrayList<StatisticsOrderNum> statisticsOrderNums = new ArrayList<>();
+        map.forEach((k,v)->{
+            StatisticsOrderNum statisticsOrderNum = new StatisticsOrderNum();
+            statisticsOrderNum.setMonth(k);
+            statisticsOrderNum.setNum(v);
+            statisticsOrderNums.add(statisticsOrderNum);
+        });
+        return statisticsOrderNums;
     }
 
 

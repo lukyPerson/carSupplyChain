@@ -25,6 +25,7 @@ CREATE TABLE `car_orders` (
   `id` varchar(50) NOT NULL,
   `number` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '订单编号',
   `price` decimal(10,2) DEFAULT NULL COMMENT '总金额',
+  `create_ts` timestamp default CURRENT_TIMESTAMP not null  comment '订单创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -32,7 +33,7 @@ CREATE TABLE `car_orders` (
 -- Records of car_orders
 -- ----------------------------
 BEGIN;
-INSERT INTO `car_orders` VALUES (1, '23234234', 45.00);
+INSERT INTO `car_orders`(id, number, price) VALUES (1, '23234234', 45.00);
 COMMIT;
 
 -- ----------------------------

@@ -1,6 +1,7 @@
 package com.dongtech.vo;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @author gzl
@@ -11,8 +12,18 @@ import java.math.BigDecimal;
 public class CarOrders {
     private String id;
     private String number;
-
+    private Date createTs;
     private BigDecimal price;
+
+
+
+    public Date getCreateTs() {
+        return createTs;
+    }
+
+    public void setCreateTs(Date createTs) {
+        this.createTs = createTs;
+    }
 
     public String getId() {
         return id;
