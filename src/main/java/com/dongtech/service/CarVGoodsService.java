@@ -24,5 +24,6 @@ public interface CarVGoodsService {
 
     Integer updateTearDownDetails(TearDownDetails tearDownDetails);
 
-    List<StatisticsOrderNum> statisticOrders();
+    int[] statisticOrders();
+    int[] statisticAmt();
 }

@@ -14,8 +14,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 <body>
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div><a href="${pageContext.request.contextPath}/cargoods/statistic">统计订单数据</a></div>
+<div><a href="${pageContext.request.contextPath}/cargoods/statisticAmt">统计金额数据</a></div>
 <div id="main" style="width: 600px;height:400px;"></div>
-
 <div id="main1" style="width: 600px;height:400px;"></div>
 <script type="text/javascript">
     // 基于准备好的dom，初始化echarts实例
@@ -31,13 +32,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             data:['销量']
         },
         xAxis: {
-            data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+            data: ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"]
         },
         yAxis: {},
         series: [{
             name: '销量',
             type: 'bar',
-            data: [5, 20, 36, 10, 10, 20]
+            // data: [5, 20, 36, 10, 10, 20,5, 20, 36, 10, 10, 20]
+            data:[${list[0]},${list[1]},${list[2]},${list[3]},${list[4]},${list[5]},${list[6]},${list[7]},${list[8]},${list[9]},${list[10]},${list[11]}]
         }]
     };
 
@@ -68,11 +70,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 radius : '55%',
                 center: ['50%', '60%'],
                 data:[
-                    {value:335, name:'直接访问'},
-                    {value:310, name:'邮件营销'},
-                    {value:234, name:'联盟广告'},
-                    {value:135, name:'视频广告'},
-                    {value:1548, name:'搜索引擎'}
+                    {value:${list[0]}, name:'1月'},
+                    {value:${list[1]}, name:'2月'},
+                    {value:${list[2]}, name:'3月'},
+                    {value:${list[3]}, name:'4月'},
+                    {value:${list[4]}, name:'5月'},
+                    {value:${list[5]}, name:'6月'},
+                    {value:${list[6]}, name:'7月'},
+                    {value:${list[7]}, name:'8月'},
+                    {value:${list[8]}, name:'9月'},
+                    {value:${list[9]}, name:'10月'},
+                    {value:${list[10]}, name:'11月'},
+                    {value:${list[11]}, name:'12月'}
                 ],
                 itemStyle: {
                     emphasis: {

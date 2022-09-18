@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -88,8 +89,9 @@ public class CarGoodsServiceImpl implements CarVGoodsService {
     }
 
     @Override
-    public List<StatisticsOrderNum> statisticOrders() {
+    public int[] statisticOrders() {
         List<CarOrders> carOrdersList = dao.queryOrders();
+        //k为月份，v为订单数
         HashMap<Integer, Integer> map = new HashMap<>();
         for (CarOrders carOrder : carOrdersList) {
             Integer orderNum = map.get(carOrder.getCreateTs().getMonth());
@@ -100,14 +102,34 @@ public class CarGoodsServiceImpl implements CarVGoodsService {
                 map.put(carOrder.getCreateTs().getMonth(),orderNum);
             }
         }
-        ArrayList<StatisticsOrderNum> statisticsOrderNums = new ArrayList<>();
+        int[] ints = new int[12];
         map.forEach((k,v)->{
-            StatisticsOrderNum statisticsOrderNum = new StatisticsOrderNum();
-            statisticsOrderNum.setMonth(k);
-            statisticsOrderNum.setNum(v);
-            statisticsOrderNums.add(statisticsOrderNum);
+            ints[k]=v;
         });
-        return statisticsOrderNums;
+
+        return ints;
+    }
+
+    @Override
+    public int[] statisticAmt() {
+        List<CarOrders> carOrdersList = dao.queryOrders();
+        //k为月份，v为金额
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (CarOrders carOrder : carOrdersList) {
+            Integer price = map.get(carOrder.getCreateTs().getMonth());
+            if (price == null){
+                map.put(carOrder.getCreateTs().getMonth(),carOrder.getPrice().intValue());
+            }else {
+                price += carOrder.getPrice().intValue();
+                map.put(carOrder.getCreateTs().getMonth(),price);
+            }
+        }
+        int[] ints = new int[12];
+        map.forEach((k,v)->{
+            ints[k]=v;
+        });
+
+        return ints;
     }
 
 

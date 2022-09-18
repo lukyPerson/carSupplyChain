@@ -359,7 +359,8 @@ $(function(){
 				]}
 				,
 				{"id":"2","name":"查询统计","parentId":"0","url":"","icon":"","order":"2","isHeader":"1","childMenus":[
-					{"id":"21","name":"统计消费金额","parentId":"16","url":""+_appPath+"carGoods/repertory.jsp","icon":"","order":"1","isHeader":"0","childMenus":""}
+					// {"id":"21","name":"统计消费金额","parentId":"16","url":""+_appPath+"carGoods/repertory.jsp","icon":"","order":"1","isHeader":"0","childMenus":""}
+					{"id":"21","name":"统计消费金额","parentId":"16","url":""+_appPath+"cargoods/statistic","icon":"","order":"1","isHeader":"0","childMenus":""}
 					//,
 					//{"id":"22","name":"已借出书籍","parentId":"16","url":""+_appPath+"jsp/frame/borrowed.jsp","icon":"","order":"1","isHeader":"0","childMenus":""}
 

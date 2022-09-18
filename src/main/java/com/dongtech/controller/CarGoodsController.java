@@ -299,8 +299,19 @@ public class CarGoodsController {
      */
     @RequestMapping("/statistic")
     public ModelAndView statisticOrderNum() throws UnsupportedEncodingException {
-//        List<StatisticsOrderNum> list = carVGoodsService.statisticOrders();
-        int[] list = new int[]{1,2,3,4,5,6,7,66,55,4,44,5};
+        int[] list = carVGoodsService.statisticOrders();
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("list",list);
+        modelAndView.setViewName("/carGoods/repertory");
+        return modelAndView;
+    }
+
+    /**
+     * 按月统计消费金额
+     */
+    @RequestMapping("/statisticAmt")
+    public ModelAndView statisticAmt() throws UnsupportedEncodingException {
+        int[] list = carVGoodsService.statisticAmt();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("list",list);
         modelAndView.setViewName("/carGoods/repertory");

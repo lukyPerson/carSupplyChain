@@ -112,8 +112,8 @@ public class CarGoodsDaoImpl implements CarGoodsDao {
             while (rs.next()) {
                 CarOrders vo = new CarOrders(rs.getString("id"),
                         rs.getString("number"),
-                        rs.getBigDecimal("price")
-
+                        rs.getBigDecimal("price"),
+                        rs.getDate("create_ts")
                 );
                 carOrdersList.add(vo);
             }

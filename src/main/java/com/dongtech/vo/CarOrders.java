@@ -49,6 +49,13 @@ public class CarOrders {
         this.price = price;
     }
 
+    public CarOrders(String id, String number, BigDecimal price,Date createTs) {
+        this.id = id;
+        this.number = number;
+        this.price = price;
+        this.createTs = createTs;
+    }
+
     public CarOrders(String id, String number, BigDecimal price) {
         this.id = id;
         this.number = number;
