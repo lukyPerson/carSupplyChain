@@ -9,7 +9,7 @@ import java.math.BigDecimal;
  * @description: ${description}
  */
 public class CarOrderDetails {
-    private Long id;
+    private String id;
     private String goodsname;
     private Integer num;
     //出厂地址
@@ -22,7 +22,7 @@ public class CarOrderDetails {
     public CarOrderDetails() {
     }
 
-    public CarOrderDetails(Long id, String goodsname, Integer num, String produce, BigDecimal price, Integer orderId) {
+    public CarOrderDetails(String id, String goodsname, Integer num, String produce, BigDecimal price, Integer orderId) {
         this.id = id;
         this.goodsname = goodsname;
         this.num = num;
@@ -31,11 +31,11 @@ public class CarOrderDetails {
         this.orderId = orderId;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

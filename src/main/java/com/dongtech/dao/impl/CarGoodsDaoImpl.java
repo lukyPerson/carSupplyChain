@@ -4,8 +4,10 @@ package com.dongtech.dao.impl;
 import com.dongtech.dao.CarGoodsDao;
 import com.dongtech.util.JDBCUtil;
 import com.dongtech.vo.*;
+import jdk.nashorn.internal.scripts.JD;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -66,6 +68,26 @@ public class CarGoodsDaoImpl implements CarGoodsDao {
         return bookList;
     }
 
+    @Override
+    public Integer updateStock(Long id,int updatedNum){
+        Connection conn = null;
+        PreparedStatement ps = null;
+        int i = 0;
+        try {
+            conn = JDBCUtil.getMysqlConn();
+            String sql = "update cargoods set num = ? where id = ?";
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1,updatedNum);
+            ps.setLong(2,id);
+            i = ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //5 关闭连接
+            JDBCUtil.close( ps, conn);
+        }
+        return i;
+    }
     /**
      * @Author gzl
      * @Description：查询订单信息
@@ -88,7 +110,7 @@ public class CarGoodsDaoImpl implements CarGoodsDao {
             rs = ps.executeQuery();
             //4 处理返回数据——将返回的一条记录封装到一个JavaBean对象
             while (rs.next()) {
-                CarOrders vo = new CarOrders(rs.getLong("id"),
+                CarOrders vo = new CarOrders(rs.getString("id"),
                         rs.getString("number"),
                         rs.getBigDecimal("price")
 
@@ -129,7 +151,7 @@ public class CarGoodsDaoImpl implements CarGoodsDao {
             rs = ps.executeQuery();
             //4 处理返回数据——将返回的一条记录封装到一个JavaBean对象
             while (rs.next()) {
-                CarOrderDetails vo = new CarOrderDetails(rs.getLong("id"),
+                CarOrderDetails vo = new CarOrderDetails(rs.getString("id"),
                         rs.getString("goods_name"),
                         rs.getInt("num"),
                         rs.getString("produce"),
@@ -150,8 +172,8 @@ public class CarGoodsDaoImpl implements CarGoodsDao {
 
 
 
-
-    public void saveOrdersDetails(String goods_name,int num,String produce ,int order_id) {
+    @Override
+    public void saveOrdersDetails(String id, String goods_name, int num, String produce , BigDecimal price,String order_id) {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -159,13 +181,15 @@ public class CarGoodsDaoImpl implements CarGoodsDao {
             //1 加载数据库驱动  2 获取数据库连接
             conn = JDBCUtil.getMysqlConn();
             final int[] totalprice = {0};
-                String sql = "INSERT INTO jk_pro_db.car_orders_details(goods_name, num,produce,order_id) values (?,?,?,?)";
+                String sql = "INSERT INTO jk_pro_db.car_orders_details(id,goods_name, num,produce,price,order_id) values (?,?,?,?,?,?)";
                 ps = conn.prepareStatement(sql);
                 long randomNum = System.currentTimeMillis();
-                ps.setString(1, goods_name);
-                ps.setInt(2,num);
-                ps.setString(3, produce);
-                ps.setInt(4,order_id);
+                ps.setObject(1,id);
+                ps.setString(2, goods_name);
+                ps.setInt(3,num);
+                ps.setString(4, produce);
+                ps.setBigDecimal(5,price);
+                ps.setString(6,order_id);
                 ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

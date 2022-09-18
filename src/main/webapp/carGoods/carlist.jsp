@@ -12,8 +12,8 @@
 <body>
 <div class="w">
     <header>
-        <a href="${pageContext.request.contextPath }/cargoods/getCart" >
-            <input type="button" οnclick="javascrtpt:window.location.href='${pageContext.request.contextPath}/cargoods/getCart'" value="下单" class="btn">
+        <a href="${pageContext.request.contextPath }/cargoods/addorders" >
+            <input type="button" οnclick="javascrtpt:window.location.href='${pageContext.request.contextPath}/cargoods/addorders'" value="下单" class="btn">
         </a>
         <%--<a href="${pageContext.request.contextPath }/cargoods/deleteAllCookie" >--%>
             <%--<input type="button" οnclick="javascrtpt:window.location.href='${pageContext.request.contextPath}/cargoods/deleteAllCookie'" value="清空购物车" class="btn">--%>
@@ -25,9 +25,17 @@
                 <tr>
                     <th width="18%">名称</th>
                     <th width="5%">价格</th>
-                    <th width="10%">描述</th>
+                    <th width="10%">生产商</th>
                     <th width="10%">数量</th>
                 </tr>
+                <c:forEach items="${list}" var="item">
+                    <tr>
+                        <th width="18%">${item.name}</th>
+                        <th width="5%">${item.price}</th>
+                        <th width="10%">${item.produce}</th>
+                        <th width="10%">${item.num}</th>
+                    </tr>
+                </c:forEach>
 
             </table>
         </div>

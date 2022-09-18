@@ -22,7 +22,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `car_orders`;
 CREATE TABLE `car_orders` (
-  `id` int(20) NOT NULL,
+  `id` varchar(50) NOT NULL,
   `number` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '订单编号',
   `price` decimal(10,2) DEFAULT NULL COMMENT '总金额',
   PRIMARY KEY (`id`)
@@ -40,12 +40,12 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `car_orders_details`;
 CREATE TABLE `car_orders_details` (
-  `id` int(11) NOT NULL,
+  `id` varchar(50) NOT NULL,
   `goods_name` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '物品名称',
   `num` int(20) DEFAULT NULL COMMENT '物品数量',
   `produce` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '生产商',
   `price` decimal(10,2) DEFAULT NULL COMMENT '价格',
-  `order_id` int(20) DEFAULT NULL COMMENT '订单外建',
+  `order_id` varchar(50) DEFAULT NULL COMMENT '订单外建',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 

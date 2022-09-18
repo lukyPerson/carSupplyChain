@@ -7,6 +7,7 @@ import com.dongtech.vo.CarOrders;
 import com.dongtech.vo.Cart;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -105,6 +107,119 @@ public class CarGoodsController {
         return modelAndView;
     }
 
+    @RequestMapping("addGoodsToCart")
+    @ResponseBody
+    public String addGoodsToCart(Integer goodsId, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        // 从cookie中获取购物车列表
+        List<Cart> carVos = getCartInCookie(response, request);
+        Cookie cookie_2st;
+        CarGoods carGoods = new CarGoods();
+        try {
+            CarGoods carGoods1 = new CarGoods();
+            carGoods1.setId(Long.parseLong(goodsId+""));
+            List<CarGoods> cList = carVGoodsService.queryList(carGoods1);
+            carGoods = cList.get(0);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        //如果购物车列表为空
+        if (carVos.size() <= 0){
+            Cart cartVO = new Cart();
+            cartVO.setNum(1);
+            cartVO.setPrice(carGoods.getPrice().intValue());
+            cartVO.setId(carGoods.getId());
+            cartVO.setType(carGoods.getType());
+            cartVO.setName(carGoods.getName());
+            cartVO.setProduce(carGoods.getProduce());
+            cartVO.setDescription(carGoods.getDescription());
+            //将当前传来的商品添加到购物车列表
+            carVos.add(cartVO);
+            if (getCookie(request) == null){
+                cookie_2st = new Cookie("cart", URLEncoder.encode(makeCookieValue(carVos),"utf-8"));
+                cookie_2st.setPath("/");
+                cookie_2st.setMaxAge(60*30);
+                response.addCookie(cookie_2st);
+            }else{
+                cookie_2st = getCookie(request);
+                cookie_2st.setPath("/");
+                cookie_2st.setMaxAge(60*30);
+                cookie_2st.setValue(URLEncoder.encode(makeCookieValue(carVos)));
+                response.addCookie(cookie_2st);
+            }
+        }
+        //当获取的购物车列表不为空时
+        else {
+            int bj =0;
+            for (Cart cart : carVos) {
+                //如果购物车中存在该商品则数量+1
+                if (cart.getId().equals(Long.valueOf(goodsId))){
+                    cart.setNum(cart.getNum()+1);
+                    bj =1;
+                    break;
+                }
+            }
+            if (bj == 0){
+                Cart cartVO = new Cart();
+                cartVO.setPrice(carGoods.getPrice().intValue());
+                cartVO.setId(carGoods.getId());
+                cartVO.setType(carGoods.getType());
+                cartVO.setName(carGoods.getName());
+                cartVO.setProduce(carGoods.getProduce());
+                cartVO.setDescription(carGoods.getDescription());
+                cartVO.setNum(1);
+                carVos.add(cartVO);
+            }
+            cookie_2st = getCookie(request);
+            cookie_2st.setPath("/");
+            //设置cookie有效时间为30分钟
+            cookie_2st.setMaxAge(60*30);
+            cookie_2st.setValue(URLEncoder.encode(makeCookieValue(carVos)));
+            response.addCookie(cookie_2st);
+        }
+        return carVos.toString();
+    }
+    /**
+     * 获取购物车列表
+     *
+     * @param response
+     * @param request
+     * @return 购物车列表
+     * @throws UnsupportedEncodingException 抛出异常
+     */
+    @RequestMapping("/getCart")
+    public ModelAndView getCart(HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
+        List<Cart> cartInCookie = getCartInCookie(response, request);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("list",cartInCookie);
+        modelAndView.setViewName("carGoods/carlist");
+        return modelAndView;
+    }
+
+    /**
+     * 下订单
+     *
+     * @param response
+     * @param request
+     * @return 商品列表
+     * @throws UnsupportedEncodingException 抛出异常
+     */
+    @RequestMapping("/addorders")
+    public ModelAndView addOrders(HttpServletRequest request,HttpServletResponse response) throws UnsupportedEncodingException {
+        List<Cart> cartInCookie = getCartInCookie(response, request);
+        carVGoodsService.saveOrders(cartInCookie);
+
+        ModelAndView modelAndView = new ModelAndView();
+        List<CarGoods> list = new ArrayList<>();
+        try {
+            CarGoods carGoods = new CarGoods();
+            list = carVGoodsService.queryList(carGoods);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        modelAndView.addObject("list",list);
+        modelAndView.setViewName("carGoods/list");
+        return modelAndView;
+    }
 
 
     /**
@@ -139,6 +254,7 @@ public class CarGoodsController {
                     item.setDescription(arr_2st[4]);//商品详情
                     item.setPrice(Integer.parseInt(arr_2st[3])); //商品市场价格
                     item.setNum(Integer.parseInt(arr_2st[5]));//加入购物车数量
+                    item.setProduce(arr_2st[6]);//加入购物车数量
                     items.add(item);
                 }
             }
@@ -175,7 +291,7 @@ public class CarGoodsController {
         StringBuffer buffer_2st = new StringBuffer();
         for (Cart item : cartVos) {
             buffer_2st.append(item.getId() + "=" + item.getType() + "=" + item.getName() + "="
-                    + item.getPrice() + "=" + item.getDescription() + "=" + item.getNum() + "==");
+                    + item.getPrice() + "=" + item.getDescription() + "=" + item.getNum() + "="+item.getProduce()+"==");
         }
         return buffer_2st.toString().substring(0, buffer_2st.toString().length() - 2);
     }

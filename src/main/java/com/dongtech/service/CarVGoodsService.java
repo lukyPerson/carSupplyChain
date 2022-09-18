@@ -16,5 +16,7 @@ public interface CarVGoodsService {
 
     List<CarOrderDetails> queryOrdersDetails(Integer id);
 
+    void saveOrders(List<Cart> cartList);
+
 
 }

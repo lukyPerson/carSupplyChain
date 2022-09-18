@@ -20,6 +20,13 @@
                     <th width="10%">操作</th>
                     <%--<th width="10%">数量</th>--%>
                 </tr>
+                <c:forEach items="${list}" var="item">
+                    <tr>
+                        <th width="18%">${item.id}</th>
+                        <th width="5%">${item.price}</th>
+                        <th width="10%">${item.number}</th>
+                    </tr>
+                </c:forEach>
 
             </table>
         </div>
